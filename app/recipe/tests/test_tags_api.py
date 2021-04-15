@@ -63,3 +63,22 @@ class PrivateTagsAPITest(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], tag.name)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_create_tag(self):
+        """Test that the tag is created successfully"""
+        payload = {'name': 'Vegan'}
+        self.client.post(TAG_URL, payload)
+
+        exists = Tag.objects.filter(
+            user=self.user,
+            name=payload['name']
+        ).exists()
+
+        self.assertTrue(exists)
+
+    def test_create_tag_with_invalid_name(self):
+        """Test that the tag is not created with empty name"""
+        payload = {'name': ''}
+        res = self.client.post(TAG_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
