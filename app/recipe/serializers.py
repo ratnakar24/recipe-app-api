@@ -19,7 +19,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    """Serializer for RecipeSerializer"""
+    """Serializer for Recipe"""
 
     ingredients = serializers.PrimaryKeyRelatedField(
         many=True,
@@ -38,3 +38,10 @@ class RecipeSerializer(serializers.ModelSerializer):
             'time_minutes', 'price'
         )
         read_only_fields = ('id',)
+
+
+class RecipeDetailSerializer(RecipeSerializer):
+    """Serializer for Recipe Detail"""
+
+    ingredients = IngredientSerializer(many=True, read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
